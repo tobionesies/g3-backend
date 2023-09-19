@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "dotenv": "^16.3.1"
+  },
+  "main": "service.js",
+  "scripts": {
+    "start": "node service.js",
+    "dev": "nodemon service.js"
+  }
+}
