@@ -2,18 +2,6 @@
  * @group component
  */
 
-describe('jest', () => {
-  describe('component test', () => {
-    it('should work', () => {
-      expect(1).toBe(1);
-    });
-  });
-}) 
-
-/**
- * @group component
- */
-
 const request = require('supertest')
 const app = require('../server')
 
