@@ -10,7 +10,9 @@
   "scripts": {
     "start": "node service.js",
     "dev": "nodemon service.js",
-    "test": "jest"
+    "test": "jest  --group=-component --group=-integration",
+    "component_test": "jest --group=component",
+    "integration_test": "jest --group=integration"
   },
   "name": "g3-backend",
   "description": "",
@@ -20,6 +22,11 @@
   "license": "ISC",
   "devDependencies": {
     "jest": "^29.7.0",
-    "nodemon": "^3.0.1"
+    "jest-runner-groups": "^2.2.0",
+    "nodemon": "^3.0.1",
+    "supertest": "^6.3.3"
+  },
+  "jest": {
+    "runner": "groups"
   }
 }
