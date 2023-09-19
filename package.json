@@ -9,6 +9,17 @@
   "main": "service.js",
   "scripts": {
     "start": "node service.js",
-    "dev": "nodemon service.js"
+    "dev": "nodemon service.js",
+    "test": "jest"
+  },
+  "name": "g3-backend",
+  "description": "",
+  "version": "1.0.0",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.1"
   }
 }
