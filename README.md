@@ -13,3 +13,7 @@
     git add .
     git commit -m "Separated server from service"
 ```
+
+#### Concerns
+
+- Unsure if file structure is correct
