@@ -1,0 +1,15 @@
+{
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-runner-groups": "^2.2.0",
+    "supertest": "^6.3.3"
+  },
+  "scripts": {
+    "test": "jest  --group=-component --group=-integration",
+    "component_test": "jest --group=component",
+    "integration_test": "jest --group=integration"
+  },
+  "jest": {
+    "runner": "groups"
+  }
+}
