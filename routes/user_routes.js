@@ -2,19 +2,19 @@ const router = require('express').Router();
 const userController = require('../controllers/user_controller.js')
 
 //Create from posted json
-router.post("/user", userController.create_user);
+router.post("/", userController.create_user);
 
 //Get all
-router.get("/users", userController.get_all_users);
+router.get("/", userController.get_all_users);
 
 
 //Get by ID
-router.get("/user/:id", userController.get_user);
+router.get("/:id", userController.get_user);
 
 //Update by ID
-router.put("/user/:id", userController.put_user);
+router.put("/:id", userController.put_user);
 
 //Delete by ID
-router.delete("/user/:id", userController.delete_user);
+router.delete("/:id", userController.delete_user);
 
 module.exports = router;
