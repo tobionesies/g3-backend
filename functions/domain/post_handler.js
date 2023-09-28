@@ -22,3 +22,16 @@ exports.create = (post) => {
 exports.readAll = () => {
     return posts;
   }
+  
+exports.removePost = (post)=>{
+  try{
+    const originalLength = posts.length;
+    posts = posts.filter(obj => obj.id !== post.id);
+    const newLength = posts.length;
+
+    return originalLength !== newLength; 
+
+  }catch(error){
+    return false
+  }
+}
