@@ -19,3 +19,24 @@ exports.get_all_posts = (req, res) => {
         res.status(500).send("Something went wrong!");    
     }
 }
+
+exports.remove_post = (req, res)=>{
+    try{
+        const id = req.params.id;
+        res.status(200).json(postHandler.removePost(id));    
+    }catch(error){
+        console.log(error);
+        res.status(500).send("Something went wrong!");    
+    }
+}
+
+exports.updatePostLike = (req, res)=>{
+    try{
+        const id = req.params.id;
+        const post = req.body;
+        res.status(200).json(postHandler.updatePostLike(id,post));    
+    }catch(error){
+        console.log(error);
+        res.status(500).send("Something went wrong!");    
+    }
+}
