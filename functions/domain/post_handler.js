@@ -3,13 +3,13 @@ const uuid = require('uuid');
 let posts = [
   {
     "id": "21773dfe-5aaf-4d8d-bb0d-09112aac1a29",
-	"user_id": "123",
-	"category": "image",
-	"image": "a flower image",
-	"likes": [],
-	"comment": [],
-	"created_at": 1695897617576,
-	"updated_at": 1695897617576
+    "user_id": "123",
+    "category": "image",
+    "image": "a flower image",
+    "likes": [],
+    "comment": [],
+    "created_at": 1695897617576,
+    "updated_at": 1695897617576
   }
 ]
 
@@ -30,6 +30,7 @@ exports.create = (post) => {
     posts.push(data);
     return data;
   }
+
 exports.readAll = () => {
     return posts;
   }

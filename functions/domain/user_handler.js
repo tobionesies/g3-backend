@@ -1,6 +1,13 @@
 const uuid = require('uuid');
 
-const users = []
+const users = [
+  {
+    "user_id": "123",
+    "username": "test_user",
+    "posts": [],
+    "created_at": 1695897617576
+  }
+]
 
 exports.create = (user) => {
     user = {id: uuid.v4(), ...user};
