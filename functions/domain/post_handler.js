@@ -41,6 +41,10 @@ exports.removePost = (id)=>{
     posts = posts.filter(obj => obj.id !== id);
     const newLength = posts.length;
 
+    if (originalLength === newLength) {
+      throw new Error("Post not found!");
+    }
+
     return originalLength !== newLength; 
 
   }catch(error){
@@ -48,21 +52,53 @@ exports.removePost = (id)=>{
   }
 }
 
-exports.updatePostLike = (id, post)=>{
-  try{
-    const data = posts.filter(obj => {
-      if(obj.id === id ){
-        obj.likes.push({
-          id: uuid.v4(),
-          user_id:post.id,
-        })
-        return obj
-      }else{
-        throw new error('object not find')
-      }
-    })
-    return data
-  }catch(error){
+exports.updatePostLike = (id, user) => {
+  try {
+    const postToUpdate = posts.find(obj => obj.id === id);
 
+    if (!postToUpdate) {
+      throw new Error('Post not found');
+    }
+
+    const getUserIndex = postToUpdate.likes.findIndex(like => like.user_id === user.id);
+
+    if (getUserIndex !== -1) {
+      postToUpdate.likes.splice(getUserIndex, 1);
+    } else {
+      postToUpdate.likes.push({
+        id: uuid.v4(),
+        user_id: user.id,
+      });
+    }
+
+    return postToUpdate;
+
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+exports.updatePostComment = (id, user)=>{
+   try {
+    const postToUpdate = posts.find(obj => obj.id === id);
+
+    if (!postToUpdate) {
+      throw new Error('Post not found');
+    }
+    
+    postToUpdate.comment.push({
+        id: uuid.v4(),
+        user_id: user.id,
+        comment: user.comment,
+        created_at: Date.now(),
+        updated_at: Date.now()
+      });
+
+    return postToUpdate;
+
+  } catch (error) {
+    console.log(error);
+    return null;
   }
 }
