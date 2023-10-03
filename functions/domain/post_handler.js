@@ -1,4 +1,7 @@
 const uuid = require('uuid');
+const auth = require('../auth')
+const { ref, uploadBytes, getDownloadURL } = require("firebase/storage");
+const {collection, addDoc} = require('firebase/firestore')
 
 let posts = [
   {
@@ -13,22 +16,33 @@ let posts = [
   }
 ]
 
-exports.create = (post) => {
-    const timestamp = Date.now();
-    const data = 
-    {
+exports.create = async(post) => {
+    try{
+      const imageRef = ref(auth.module.str, `${post.user_id}/${post.image.name}`)
+      try{
+        const uploadSnapshot = await uploadBytes(imageRef,post.image)
+      }catch(err){
+        console.error(err)
+        throw new Error("Failed to upload image.")
+      }
+      const downloadURL = await getDownloadURL(imageRef)
+      const data = await addDoc(collection(auth.module.db,"posts"),{
         id: uuid.v4(),
         user_id: post.user_id,
         category: post.category,
-        image: post.image,
+        image: downloadURL,
         likes: [],
         comment: [],
-        created_at: timestamp,
-        updated_at: timestamp
-
-    };
-    posts.push(data);
-    return data;
+        created_at: Date.now()
+      })
+      console.log(data.id)
+      return data.id;
+    }catch(error){
+      console.log(error)
+      throw new Error("failed to add data in the databse")
+    }
+    
+   
   }
 
 exports.readAll = () => {
