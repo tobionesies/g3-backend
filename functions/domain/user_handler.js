@@ -1,4 +1,6 @@
 const uuid = require('uuid');
+const auth = require("../auth");
+const {createUserWithEmailAndPassword, signInWithEmailAndPassword} = require('firebase/auth')
 
 const users = [
   {
@@ -39,4 +41,38 @@ exports.create = (user) => {
     indx = users.findIndex(user => user.id === id);
     const user = users.splice(indx, indx);
     return  user;
+ }
+
+ exports.signup = async(user)=>{
+  try{
+    const userRecord = await auth.module.admin.auth().createUser({email: user.email, password: user.password});
+    const uid = userRecord.uid
+
+    const customClaims ={
+      "username": user.username,
+      "phone_number": user.phone_number,
+      "address": user.address,
+      "profile_picture": user.profile_picture
+    }
+
+    await auth.module.admin.auth().setCustomUserClaims(uid, customClaims)
+    return {message:'user created successfully'}
+
+  }catch(error){
+    console.log(error)
+    return {error: error}
+  }
+ }
+
+
+ exports.signin =async (user)=>{
+  try{
+    const userCredential = await signInWithEmailAndPassword(auth.module.auth,user.email, user.password)
+    const authenticatedUser = userCredential.user
+    const token = await authenticatedUser.getIdToken()
+    return {token}
+  }catch(error){
+    console.log('Error', error)
+    return {error: error}
+  }
  }
