@@ -10,9 +10,10 @@ exports.create_user = (req, res) => {
     }
 }
 
-exports.get_all_users = (req, res) => {
+exports.get_all_users = async(req, res) => {
     try{
-        res.status(200).json(userHandler.readAll());    
+        const allUser = await userHandler.readAll()
+        res.status(200).json(allUser);    
     }catch(error){
         console.log(error);
         res.status(500).send("Something went wrong!");    
@@ -62,5 +63,38 @@ exports.delete_user = (req, res) => {
     }catch(error){
         console.log(error);
         res.status(500).send(error);    
+    }
+}
+
+exports.signup = async(req, res)=>{
+    try{
+        const user={
+            username: req.body.username,
+            email: req.body.email,
+            password: req.body.password,
+            phone_number: req.body.phone_number,
+            address: req.body.address,
+            profile_picture: req.body.profile_picture
+        }
+        const response = await userHandler.signup(user)
+        res.status(201).json(response)
+    }catch(error){
+        console.log(error)
+        res.status(500).send(error)
+    }
+}
+
+exports.signin = async(req, res)=>{
+    try{
+        const user={
+            email: req.body.email,
+            password: req.body.password,
+        }
+        const response = await userHandler.signin(user)
+        console.log(response)
+        res.status(201).json(response)
+    }catch(error){
+        console.log(error)
+        res.status(500).send(error)
     }
 }
