@@ -1,6 +1,7 @@
 const uuid = require('uuid');
 const auth = require("../auth");
 const {signInWithEmailAndPassword} = require('firebase/auth')
+const { ref, uploadBytes, getDownloadURL } = require("firebase/storage");
 
 const users = [
   {
@@ -57,14 +58,25 @@ exports.create = (user) => {
 
  exports.signup = async(user)=>{
   try{
+    const name = uuid.v4();
     const userRecord = await auth.module.admin.auth().createUser({email: user.email, password: user.password});
     const uid = userRecord.uid
+    const imageRef = ref(auth.module.str, `${uid}/${name}`)
+    try {
+      const metadata = {
+        contentDisposition: "inline",
+      }
+      const uploadSnapshot = await uploadBytes(imageRef, user.profile_picture, metadata)
+    } catch (error) {
+      throw new Error("Failed to upload image");
+    }
+    const downloadURL = await getDownloadURL(imageRef);
 
     const customClaims ={
       "username": user.username,
       "phone_number": user.phone_number,
       "address": user.address,
-      "profile_picture": user.profile_picture
+      "profile_picture": downloadURL
     }
 
     await auth.module.admin.auth().setCustomUserClaims(uid, customClaims)
