@@ -25,6 +25,6 @@ jobs:
         run: npm install && cd functions && npm install
          
       - name: Deploy to Firebase
-        run: firebase deploy --token="1//0cQp0cNYUHdRmCgYIARAAGAwSNwF-L9IrT9dbhrhP12kQ2gr1uSAx7BEwGxJsAFMCEycBkB_62LXPJV8ogP26ZP1B2DaD31hwqSw"
+        run: firebase deploy --token=${{ secrets.FIREBASE_TOKEN }}
 
         
