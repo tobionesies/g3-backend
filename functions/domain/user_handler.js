@@ -1,6 +1,6 @@
 const uuid = require('uuid');
 const auth = require("../auth");
-const {createUserWithEmailAndPassword, signInWithEmailAndPassword} = require('firebase/auth')
+const {signInWithEmailAndPassword} = require('firebase/auth')
 
 const users = [
   {
@@ -17,8 +17,20 @@ exports.create = (user) => {
     return user;
   }
   
-  exports.readAll = () => {
-    return users;
+  exports.readAll = async() => {
+    try{
+      const listUsersResult = await auth.module.admin.auth().listUsers();
+      const users = listUsersResult.users.map((userRecord) => ({
+        uid: userRecord.uid,
+        email: userRecord.email,
+        customClaims: userRecord.customClaims,   
+      }));
+      return users;
+    }catch(error){
+      console.error(error)
+      throw new Error('Failed to retrieve all users!')
+    }
+    
   }
 
   exports.read = (id) => {

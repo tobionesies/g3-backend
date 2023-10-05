@@ -10,9 +10,10 @@ exports.create_user = (req, res) => {
     }
 }
 
-exports.get_all_users = (req, res) => {
+exports.get_all_users = async(req, res) => {
     try{
-        res.status(200).json(userHandler.readAll());    
+        const allUser = await userHandler.readAll()
+        res.status(200).json(allUser);    
     }catch(error){
         console.log(error);
         res.status(500).send("Something went wrong!");    
