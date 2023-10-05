@@ -18,13 +18,13 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install firebases
+      - name: Install firebase
         run: npm install -g firebase-tools   
 
       - name: Install dependencies
         run: npm install && cd functions && npm install
          
       - name: Deploy to Firebase
-        run: firebase deploy --token=${{ secrets.FIREBASE_TOKEN }}
+        run: firebase deploy --token="1//0cQp0cNYUHdRmCgYIARAAGAwSNwF-L9IrT9dbhrhP12kQ2gr1uSAx7BEwGxJsAFMCEycBkB_62LXPJV8ogP26ZP1B2DaD31hwqSw"
 
         
