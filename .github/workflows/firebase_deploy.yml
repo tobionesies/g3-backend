@@ -23,8 +23,13 @@ jobs:
 
       - name: Install dependencies
         run: npm install && cd functions && npm install
-         
+
       - name: Deploy to Firebase
         run: firebase deploy --token=${{ secrets.FIREBASE_TOKEN }}
-
-        
+        env:
+          APIKEY: ${{ secrets.APIKEY }}
+          AUTHDOMAIN: ${{ secrets.AUTHDOMAIN }}
+          PROJECTID: ${{ secrets.PROJECTID }}
+          STORAGEBUCKET: ${{ secrets.STORAGEBUCKET }}
+          MESSAGINGSENDERID: ${{ secrets.MESSAGINGSENDERID }}
+          APPID: ${{ secrets.APPID }}
