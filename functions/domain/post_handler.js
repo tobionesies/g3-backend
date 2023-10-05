@@ -34,6 +34,7 @@ exports.create = async (post) => {
       user_id: post.user_id,
       category: post.category,
       image: downloadURL,
+      text: post.text,
       likes: [],
       comment: [],
       created_at: Date.now(),
@@ -49,6 +50,7 @@ exports.create = async (post) => {
 };
 
 exports.readAll = async () => {
+  
   const querySnapshot = await getDocs(collection(auth.module.db, "posts"));
   const allPosts = [];
   querySnapshot.forEach((doc) => {
@@ -139,7 +141,7 @@ exports.updatePostComment = async (id, user) => {
     };
 
     const updatedComments = [...(postData.comments || []), newComment];
-    await updateDoc(postRef, { comments: updatedComments });
+    await updateDoc(postRef, { comment: updatedComments });
 
     return { ...postData, comments: updatedComments };
   } catch (error) {
