@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install firebase
+      - name: Install firebases
         run: npm install -g firebase-tools   
 
       - name: Install dependencies
