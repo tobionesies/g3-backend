@@ -68,6 +68,7 @@ exports.create = (user) => {
       }
       const uploadSnapshot = await uploadBytes(imageRef, user.profile_picture, metadata)
     } catch (error) {
+      console.log(error)
       throw new Error("Failed to upload image");
     }
     const downloadURL = await getDownloadURL(imageRef);

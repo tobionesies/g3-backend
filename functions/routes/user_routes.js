@@ -19,7 +19,7 @@ router.put("/:id", userController.put_user);
 //Delete by ID
 router.delete("/:id", userController.delete_user);
 
-router.post("/signup", upload.single("profile_picture"),userController.signup)
+router.post("/signup", upload.single('profile_picture'),userController.signup)
 router.post("/signin",userController.signin)
 
 module.exports = router;

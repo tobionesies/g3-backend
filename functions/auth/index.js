@@ -4,7 +4,6 @@ const { getFirestore } = require("firebase/firestore");
 const { getStorage } = require("firebase/storage");
 const { getAuth } = require("firebase/auth");
 const admin = require("firebase-admin");
-const privateKey = require("./privateKey.json")
 const dotenv = require("dotenv");
 dotenv.config();
 

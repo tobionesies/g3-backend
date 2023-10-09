@@ -69,13 +69,14 @@ exports.delete_user = (req, res) => {
 exports.signup = async(req, res)=>{
     try{
         const user={
-            username: req.body.username,
-            email: req.body.email,
-            password: req.body.password,
-            phone_number: req.body.phone_number,
-            address: req.body.address,
-            profile_picture: req.body.profile_picture
+            username:req.body.username,
+            email:req.body.email,
+            password:req.body.password,
+            phone_number:req.body.phone_number,
+            address:req.body.address,
+            profile_picture:req.file.buffer
         }
+
         const response = await userHandler.signup(user)
         res.status(201).json(response)
     }catch(error){
