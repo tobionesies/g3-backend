@@ -5,6 +5,7 @@ exports.create_post = async(req, res) => {
         const post ={
             user_id: req.body.user_id,
             category: req.body.category,
+            text: req.body.text,
             image_name: req.body.image_name,
             image: req.file.buffer
         } 
