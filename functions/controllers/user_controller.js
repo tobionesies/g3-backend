@@ -74,7 +74,7 @@ exports.signup = async(req, res)=>{
             password:req.body.password,
             phone_number:req.body.phone_number,
             address:req.body.address,
-            profile_picture:req.file.buffer
+            picture:req.file.buffer
         }
 
         const response = await userHandler.signup(user)

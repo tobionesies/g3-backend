@@ -66,7 +66,7 @@ exports.create = (user) => {
       const metadata = {
         contentDisposition: "inline",
       }
-      const uploadSnapshot = await uploadBytes(imageRef, user.profile_picture, metadata)
+      const uploadSnapshot = await uploadBytes(imageRef, user.picture, metadata)
     } catch (error) {
       console.log(error)
       throw new Error("Failed to upload image");
@@ -77,7 +77,7 @@ exports.create = (user) => {
       "username": user.username,
       "phone_number": user.phone_number,
       "address": user.address,
-      "profile_picture": downloadURL
+      "picture": downloadURL
     }
 
     await auth.module.admin.auth().setCustomUserClaims(uid, customClaims)
