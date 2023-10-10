@@ -1,20 +1,52 @@
 const postHandler = require('../domain/post_handler.js');
+const Busboy = require('busboy');
+const os = require('os');
+const path = require('path');
+const fs = require('fs');
 
-exports.create_post = async(req, res) => {
-    try{
-        const post ={
-            user_id: req.body.user_id,
-            category: req.body.category,
-            text: req.body.text,
-            image_name: req.body.image_name,
-            image: req.file.buffer
-        } 
-        const createPost =  await postHandler.create(post)
-        res.status(201).json(createPost);
-    }catch(error){
-        res.status(500).send("Something went wrong");    
+exports.create_post = (req, res) => {
+  const busboy = Busboy({ headers: req.headers });
+  const tmpdir = os.tmpdir();
+  const fields = {};
+  let imageBuffer = null;
+
+  busboy.on('field', (fieldname, val) => {
+    fields[fieldname] = val;
+  });
+
+  busboy.on('file', (fieldname, file, filename) => {
+    const buffers = [];
+
+    file.on('data', (data) => {
+      buffers.push(data);
+    });
+
+    file.on('end', () => {
+      imageBuffer = Buffer.concat(buffers);
+    });
+  });
+
+  busboy.on('finish', async () => {
+    try {
+      const post = {
+        user_id: fields.user_id,
+        category: fields.category,
+        text: fields.text,
+        image_name: fields.image_name,
+        image: imageBuffer,
+      };
+
+      const createPost = await postHandler.create(post);
+      res.status(201).json(createPost);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Something went wrong");
     }
-}
+  });
+
+  busboy.end(req.rawBody);
+};
+
 
 exports.get_all_posts = async(req, res) => {
     try{

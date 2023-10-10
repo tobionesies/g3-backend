@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const userController = require('../controllers/user_controller.js')
 const multer = require('multer')
-const upload = multer()
+const upload = multer({ dest: 'uploads/'})
 
 //Create from posted json
 router.post("/", userController.create_user);

@@ -3,9 +3,6 @@ const app = express();
 const cors = require('cors')
 app.use(express.json());
 
-// app.get('/', (req, res) => {
-//    res.json({status: "ok"});
-// });
 
 
 app.use(express.static('public'));
