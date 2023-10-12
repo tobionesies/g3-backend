@@ -1,6 +1,5 @@
 const uuid = require("uuid");
 const auth = require("../auth");
-const { ref, uploadBytes, getDownloadURL } = require("firebase/storage");
 const {
   collection,
   doc,
@@ -13,41 +12,58 @@ const {
 
 
 exports.create = async (post) => {
+  const db = auth.module.admin.firestore();
+  const storage = auth.module.admin.storage();
+
   try {
     const metadata = {
-      //specify what format of image we accept
+      // Specify what format of image we accept
       contentDisposition: "inline", // This should make it viewable in browser
     };
 
-    const imageRef = ref(auth.module.str, `${post.user_id}/${post.image_name}`);
+    const bucket = storage.bucket(); // Your Firebase storage bucket
+    const imageRef = bucket.file(`${post.user_id}/${post.image_name}`);
+
     try {
-      const uploadSnapshot = await uploadBytes(imageRef, post.image, metadata);
+      await imageRef.save(post.image, metadata);
     } catch (err) {
       console.error(err);
-      throw new Error("Failed to upload image.");
+      return { error: err, message: "Failed to upload image." };
     }
-    const downloadURL = await getDownloadURL(imageRef);
 
+    // Getting download URL
+    const downloadURL = await imageRef.getSignedUrl({
+      action: 'read',
+      expires: '03-09-2491'
+    });
+
+    //get a username
+    let user = await auth.module.admin.auth().getUser(post.user_id)
+    
+
+    // Using uuid to generate a unique ID
     const id = uuid.v4();
     const data = {
       id,
       user_id: post.user_id,
+      username: user.customClaims.username,
       category: post.category,
-      image: downloadURL,
+      image: downloadURL[0], // The URL is in an array
       text: post.text,
       likes: [],
-      comment: [],
+      comments: [],
       created_at: Date.now(),
     };
 
-    await setDoc(doc(collection(auth.module.db, "posts"), id), data);
-
+    await db.collection('posts').doc(id).set(data);
     return data;
+
   } catch (error) {
     console.log(error);
-    throw new Error("failed to add data in the databse");
+    throw new Error("Failed to add data in the database");
   }
 };
+
 
 exports.readAll = async () => {
   
@@ -61,6 +77,16 @@ exports.readAll = async () => {
   });
   return allPosts;
 };
+
+exports.readPost = async(id)=>{
+  try{
+    const postRef = doc(collection(auth.module.db, "posts"), id); // Get a DocumentReference to the post
+    const docSnap = await getDoc(postRef);
+    return docSnap.data()
+  }catch(error){
+    throw new Error(error)
+  }
+}
 
 exports.removePost = async (id) => {
   try {
@@ -130,22 +156,26 @@ exports.updatePostComment = async (id, user) => {
     if (!postData) {
       throw new Error("Post not found");
     }
+    console.log(postData);
 
-    // Add a new comment to the comments array
-    const newComment = {
-      id: uuid.v4(),
-      user_id: user.id,
-      comment: user.comment,
-      created_at: Date.now(),
-      updated_at: Date.now(),
-    };
+    const commentsArray = postData.comment || [];
+   
+      // Add a new comment
+      const newComment = {
+        id: uuid.v4(),
+        user_id: user.id,
+        comment: user.comment,
+        created_at: Date.now(),
+        updated_at: Date.now(),
+      };
+      commentsArray.push(newComment);
+    
 
-    const updatedComments = [...(postData.comments || []), newComment];
-    await updateDoc(postRef, { comment: updatedComments });
+    await updateDoc(postRef, { comment: commentsArray });
 
-    return { ...postData, comments: updatedComments };
+    return { ...postData, comment: commentsArray }; // Return the updated post data
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to comment data!!");
+    throw new Error("Failed to update comment data!!");
   }
 };

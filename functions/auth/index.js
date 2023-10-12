@@ -41,6 +41,7 @@ const auth = getAuth(app);
 
 admin.initializeApp({
   credential: admin.credential.cert(privateKeys),
+  storageBucket: process.env.STORAGEBUCKET,
 });
 
 
