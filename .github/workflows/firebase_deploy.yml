@@ -26,4 +26,20 @@ jobs:
 
       - name: Deploy to Firebase
         run: firebase deploy --token=${{ secrets.FIREBASE_TOKEN }}
-       
+        env:
+          APIKEY: ${{ vars.APIKEY }}
+          AUTHDOMAIN: ${{ vars.AUTHDOMAIN }}
+          PROJECTID: ${{ vars.PROJECTID }}
+          STORAGEBUCKET: ${{ vars.STORAGEBUCKET }}
+          MESSAGINGSENDERID: ${{ vars.MESSAGINGSENDERID }}
+          F_AUTH_PROVIDER_X509_CERT_URL: ${{ vars.F_AUTH_PROVIDER_X509_CERT_URL }}
+          F_AUTH_URI: ${{ secrets.F_AUTH_URI }}
+          F_CLIENT_EMAIL: ${{ secrets.F_CLIENT_EMAIL }}
+          F_CLIENT_ID: ${{ secrets.F_CLIENT_ID }}
+          F_CLIENT_X509_CERT_URL: ${{ secrets.F_CLIENT_X509_CERT_URL }}
+          F_PRIVATE_KEY: ${{ secrets.F_PRIVATE_KEY }}
+          F_PRIVATE_KEY_ID: ${{ secrets.F_PRIVATE_KEY_ID }}
+          F_PROJECT_ID: ${{ secrets.F_PROJECT_ID }}
+          F_TOKEN_URI: ${{ secrets.F_TOKEN_URI }}
+          F_TYPE: ${{ secrets.F_TYPE }}
+          F_UNIVERSE_DOMAIN: ${{ secrets.F_UNIVERSE_DOMAIN }}
